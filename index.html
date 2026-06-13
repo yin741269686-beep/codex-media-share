@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Codex 新媒体实战分享 · 女性色彩版</title>
+  <style>
+    /*
+      编辑提示：
+      1. 改整体颜色：只改下面 :root 里的变量。
+      2. 改页面内容：搜索 <section class="slide">，每个 section 是一页。
+      3. 浏览器里点右上角“编辑模式”，可以直接点文字修改；修改会暂存到本机浏览器。
+    */
+    :root {
+      --paper: #fff7f8;
+      --paper-2: #fffdfb;
+      --ink: #3a2230;
+      --muted: #8b6f7c;
+      --rose: #d9467c;
+      --rose-2: #f8bbd0;
+      --soft: #fce7ef;
+      --peach: #ffe1d2;
+      --lavender: #eee7ff;
+      --teal: #2f9e8f;
+      --gold: #e59b2e;
+      --violet: #8b5cf6;
+      --line: #f2cad6;
+      --card: rgba(255,255,255,.78);
+      --shadow: 0 22px 70px rgba(127, 55, 85, .14);
+      --radius: 18px;
+      --font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; overflow: hidden; background: var(--paper); color: var(--ink); font-family: var(--font); }
+    body { -webkit-font-smoothing: antialiased; }
+    button { font: inherit; }
+
+    .app { position: fixed; inset: 0; overflow: hidden; }
+    .deck {
+      height: 100%;
+      display: flex;
+      transition: transform .62s cubic-bezier(.22,.9,.22,1);
+      will-change: transform;
+    }
+    .slide {
+      position: relative;
+      flex: 0 0 100vw;
+      height: 100vh;
+      padding: clamp(26px, 4.8vw, 64px);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 88% 12%, rgba(248,187,208,.46), transparent 21vw),
+        radial-gradient(circle at 8% 88%, rgba(255,225,210,.5), transparent 19vw),
+        radial-gradient(circle at 86% 88%, rgba(238,231,255,.6), transparent 18vw),
+        linear-gradient(135deg, var(--paper-2), var(--paper));
+    }
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 84px 0 auto 0;
+      height: 1px;
+      background: var(--line);
+    }
+    .chrome {
+      position: absolute;
+      top: 26px;
+      left: clamp(28px, 4.8vw, 64px);
+      right: clamp(28px, 4.8vw, 64px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--rose);
+      letter-spacing: .04em;
+      z-index: 3;
+    }
+    .page-no { color: var(--muted); font-variant-numeric: tabular-nums; }
+    .content { position: relative; z-index: 2; height: 100%; padding-top: 52px; }
+
+    h1, h2, h3, p { margin: 0; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 7px 18px;
+      border: 1px solid var(--rose-2);
+      border-radius: 8px;
+      color: var(--rose);
+      background: rgba(252,231,239,.72);
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .hero-title { margin-top: 54px; font-size: clamp(62px, 8vw, 104px); line-height: .92; letter-spacing: -.04em; font-weight: 900; }
+    .hero-line { width: 156px; height: 6px; border-radius: 999px; background: var(--rose); margin: 26px 0 30px; }
+    .hero-sub { font-size: clamp(30px, 3.7vw, 54px); line-height: 1.18; font-weight: 900; max-width: 660px; letter-spacing: -.03em; }
+    .lead { color: var(--muted); font-size: clamp(18px, 1.7vw, 24px); line-height: 1.65; }
+    .title { font-size: clamp(30px, 3.1vw, 46px); line-height: 1.15; font-weight: 900; letter-spacing: -.03em; }
+    .subtitle { margin-top: 18px; color: var(--muted); font-size: clamp(18px, 1.6vw, 23px); line-height: 1.55; }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+    .metric-panel { position: absolute; top: 114px; right: 10.5vw; width: 410px; padding: 42px 45px; }
+    .metric-row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 22px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+    .metric-row:last-child { border-bottom: 0; }
+    .metric-label { color: var(--muted); font-size: 22px; font-weight: 800; }
+    .metric-value { font-size: 58px; line-height: .9; font-weight: 900; color: var(--rose); font-variant-numeric: tabular-nums; }
+    .metric-row:nth-child(2) .metric-value { color: var(--teal); }
+    .metric-row:nth-child(3) .metric-value { color: var(--gold); }
+    .foot { position: absolute; left: clamp(28px, 4.8vw, 64px); bottom: 36px; color: var(--muted); font-size: 14px; }
+
+    .agenda { margin-top: 80px; max-width: 920px; }
+    .agenda-item { display: grid; grid-template-columns: 86px 1fr; gap: 28px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+    .num-box { width: 68px; height: 54px; display: grid; place-items: center; border: 1px solid currentColor; border-radius: 8px; background: rgba(255,255,255,.48); color: var(--rose); font-weight: 900; }
+    .agenda-item:nth-child(2) .num-box { color: var(--teal); }
+    .agenda-item:nth-child(3) .num-box { color: var(--gold); }
+    .agenda-item:nth-child(4) .num-box { color: var(--violet); }
+    .agenda h3 { font-size: 26px; margin-bottom: 7px; }
+    .agenda p { color: var(--muted); font-size: 16px; line-height: 1.5; }
+
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px; }
+    .feature-grid { margin-top: 64px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px; }
+    .feature-grid .feature:nth-child(4) { grid-column: 1 / span 1; margin-left: 95px; width: calc(100% + 120px); }
+    .feature-grid .feature:nth-child(5) { grid-column: 3 / span 1; margin-left: -95px; width: calc(100% + 120px); }
+    .feature { min-height: 160px; padding: 28px; }
+    .feature .idx { color: var(--rose); font-size: 28px; font-weight: 900; }
+    .feature h3 { margin-top: 12px; font-size: 24px; }
+    .feature p { margin-top: 18px; color: var(--muted); line-height: 1.5; }
+    .task-grid { margin-top: 34px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+    .task-card { min-height: 132px; padding: 18px 16px; }
+    .task-card .num { color: var(--rose); font-size: 13px; font-weight: 900; letter-spacing: .04em; }
+    .task-card:nth-child(2n) .num { color: var(--teal); }
+    .task-card:nth-child(3n) .num { color: var(--gold); }
+    .task-card h3 { margin-top: 10px; font-size: 19px; line-height: 1.12; }
+    .task-card p { margin-top: 10px; color: var(--muted); font-size: 13px; line-height: 1.38; }
+    .task-summary { margin-top: 24px; max-width: 100%; }
+
+    .compare-wrap { margin-top: 70px; display: grid; grid-template-columns: 1fr 70px 1fr; align-items: center; gap: 28px; }
+    .compare { padding: 36px; min-height: 250px; }
+    .compare.highlight { background: rgba(252,231,239,.82); border-color: var(--rose-2); }
+    .arrow { height: 4px; background: var(--gold); border-radius: 999px; position: relative; }
+    .arrow::after { content: ""; position: absolute; right: -2px; top: -6px; border: 8px solid transparent; border-left-color: var(--gold); }
+    .kv { display: grid; grid-template-columns: 70px 1fr; gap: 18px; margin-top: 28px; line-height: 1.6; }
+    .kv b { color: var(--rose); }
+    .callout { margin: 46px auto 0; max-width: 920px; padding: 18px 28px; border-radius: 10px; border: 1px solid var(--line); background: rgba(252,231,239,.58); text-align: center; font-weight: 900; }
+
+    .flow { margin-top: 60px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 64px; align-items: stretch; }
+    .step { min-height: 240px; padding: 30px 24px; position: relative; }
+    .step:not(:last-child)::after { content: "→"; position: absolute; right: -48px; top: 47%; color: var(--muted); font-size: 34px; }
+    .step .k { color: var(--rose); font-size: 14px; font-weight: 900; letter-spacing: .06em; }
+    .step:nth-child(2) .k { color: var(--teal); }
+    .step:nth-child(3) .k { color: var(--gold); }
+    .step:nth-child(4) .k { color: var(--violet); }
+    .step h3 { margin-top: 34px; font-size: 30px; line-height: 1.08; }
+    .step p { margin-top: 20px; color: var(--muted); line-height: 1.4; }
+    .note-row { margin-top: 44px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .note { padding: 20px 28px; border-radius: 10px; border: 1px solid var(--line); background: rgba(255,255,255,.55); font-weight: 800; }
+    .funnel { margin-top: 44px; display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; }
+    .funnel strong { display: block; color: var(--rose); font-size: 42px; line-height: 1; }
+    .funnel div:nth-child(2) strong { color: var(--teal); }
+    .funnel div:nth-child(3) strong { color: var(--gold); }
+    .funnel span { color: var(--muted); font-size: 14px; }
+
+    .prompt-box { padding: 34px; min-height: 500px; border-color: var(--rose); }
+    .prompt-box h3 { color: var(--rose); margin-bottom: 28px; }
+    .prompt-text { white-space: pre-line; font-size: 18px; line-height: 1.62; }
+    .reason-list { display: grid; gap: 22px; margin-top: 26px; }
+    .reason { display: grid; grid-template-columns: 170px 1fr; align-items: center; gap: 18px; padding: 18px 24px; border-radius: 10px; border: 1px solid var(--line); background: rgba(255,255,255,.65); }
+    .reason b { color: var(--gold); }
+    .reason span { color: var(--muted); }
+
+    .filter-system { margin-top: 46px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 26px; align-items: stretch; }
+    .filter-stage { padding: 28px 26px; min-height: 330px; position: relative; display: flex; flex-direction: column; }
+    .filter-stage:not(:last-child)::after { content: "→"; position: absolute; right: -22px; top: 44%; color: var(--muted); font-size: 28px; font-weight: 900; z-index: 2; }
+    .filter-stage .badge { width: max-content; padding: 8px 14px; border: 1px solid currentColor; border-radius: 999px; font-size: 13px; font-weight: 900; color: var(--rose); background: rgba(252,231,239,.72); }
+    .filter-stage:nth-child(2) .badge { color: var(--gold); background: rgba(255,244,221,.78); }
+    .filter-stage:nth-child(3) .badge { color: var(--teal); background: rgba(238,248,246,.78); }
+    .filter-stage h3 { margin-top: 28px; font-size: 28px; line-height: 1.16; }
+    .filter-stage p { margin-top: 18px; color: var(--muted); line-height: 1.52; font-size: 16px; }
+    .filter-output { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--line); color: var(--ink); font-weight: 900; line-height: 1.45; }
+    .filter-principle { margin-top: 26px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 22px; }
+    .filter-principle .mini { padding: 20px 24px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.62); font-weight: 900; line-height: 1.5; }
+
+    .image-case { margin-top: 34px; display: grid; grid-template-columns: .96fr 1.04fr; gap: 28px; align-items: stretch; }
+    .image-logic { padding: 28px; min-height: 310px; }
+    .image-logic h3 { color: var(--rose); font-size: 26px; line-height: 1.16; }
+    .image-logic p { margin-top: 18px; color: var(--muted); line-height: 1.55; font-size: 16px; }
+    .problem-list { margin-top: 24px; display: grid; gap: 14px; }
+    .problem { padding: 16px 18px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.62); font-weight: 900; line-height: 1.45; }
+    .problem b { color: var(--gold); }
+    .table-mock { padding: 24px; min-height: 310px; }
+    .table-mock h3 { font-size: 24px; color: var(--teal); }
+    .field-grid { margin-top: 18px; display: grid; grid-template-columns: 1.05fr .95fr; gap: 10px; }
+    .field { padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: rgba(255,255,255,.66); }
+    .field strong { display: block; font-size: 13px; color: var(--rose); margin-bottom: 7px; }
+    .field span { color: var(--muted); font-size: 13px; line-height: 1.38; }
+    .image-pipeline { margin-top: 24px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+    .pipeline-card { padding: 18px 16px; min-height: 118px; position: relative; }
+    .pipeline-card:not(:last-child)::after { content: "→"; position: absolute; right: -22px; top: 44%; color: var(--muted); font-size: 25px; font-weight: 900; }
+    .pipeline-card h3 { font-size: 18px; line-height: 1.2; }
+    .pipeline-card p { margin-top: 14px; color: var(--muted); font-size: 13px; line-height: 1.38; }
+
+    .automation { margin-top: 66px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 30px; }
+    .auto-card { padding: 28px 18px; min-height: 170px; text-align: center; position: relative; }
+    .auto-card:not(:last-child)::after { content: "→"; position: absolute; right: -24px; top: 48%; color: var(--muted); font-size: 25px; }
+    .auto-card h3 { font-size: 20px; line-height: 1.25; }
+    .auto-card p { margin-top: 24px; color: var(--muted); font-size: 14px; line-height: 1.45; }
+
+    .system-map { margin-top: 46px; display: grid; grid-template-columns: 1fr 1.14fr 1fr; gap: 28px; align-items: stretch; }
+    .system-card { padding: 26px 24px; min-height: 138px; position: relative; }
+    .system-card h3 { font-size: 24px; line-height: 1.18; }
+    .system-card p { margin-top: 14px; color: var(--muted); line-height: 1.5; font-size: 15px; }
+    .system-core { padding: 32px 30px; background: rgba(252,231,239,.86); border-color: var(--rose-2); text-align: center; display: grid; align-content: center; }
+    .system-core h3 { color: var(--rose); font-size: 34px; }
+    .system-core p { margin-top: 18px; font-size: 17px; }
+    .system-lanes { display: grid; grid-template-rows: repeat(2, 1fr); gap: 24px; }
+    .system-arrow { position: absolute; top: 50%; right: -23px; transform: translateY(-50%); color: var(--rose); font-size: 28px; font-weight: 900; z-index: 2; }
+    .system-arrow.left { left: -23px; right: auto; }
+    .system-footer { margin-top: 30px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .system-chip { padding: 16px 18px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.62); font-weight: 900; text-align: center; }
+    .system-recap-grid { margin-top: 24px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .system-recap-card { padding: 16px 18px 18px; min-height: 140px; }
+    .system-recap-card .tagline { color: var(--rose); font-size: 13px; font-weight: 900; letter-spacing: .04em; }
+    .system-recap-card:nth-child(2) .tagline,
+    .system-recap-card:nth-child(5) .tagline { color: var(--teal); }
+    .system-recap-card:nth-child(3) .tagline,
+    .system-recap-card:nth-child(6) .tagline { color: var(--gold); }
+    .system-recap-card h3 { margin-top: 12px; font-size: 20px; line-height: 1.14; }
+    .system-recap-card p { margin-top: 10px; color: var(--muted); line-height: 1.42; font-size: 13px; }
+    .system-recap-core { margin-top: 18px; padding: 18px 24px; display: grid; grid-template-columns: 190px 1fr; gap: 24px; align-items: center; background: rgba(252,231,239,.78); border-color: var(--rose-2); }
+    .system-recap-core h3 { color: var(--rose); font-size: 26px; line-height: 1.15; }
+    .system-recap-core p { color: var(--muted); line-height: 1.48; font-size: 15px; }
+    .system-recap-callout { margin-top: 22px; }
+
+    .qa-panel { margin-top: 64px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+    .qa { padding: 34px; min-height: 300px; }
+    .qa.good { background: rgba(238,248,246,.82); border-color: rgba(47,158,143,.35); }
+    .qa.need { background: rgba(255,244,221,.82); border-color: rgba(229,155,46,.36); }
+    .qa h3 { font-size: 28px; margin-bottom: 26px; }
+    .qa.good h3 { color: var(--teal); }
+    .qa.need h3 { color: var(--gold); }
+    .qa li { margin: 14px 0; color: var(--ink); }
+
+    .start-grid { margin-top: 62px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px; }
+    .start-card { padding: 32px 34px; min-height: 170px; display: grid; grid-template-columns: 58px 1fr; gap: 22px; }
+    .circle { width: 48px; height: 48px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--rose-2); background: var(--soft); color: var(--rose); font-weight: 900; }
+    .start-card h3 { font-size: 22px; margin-bottom: 12px; }
+    .start-card p { color: var(--muted); line-height: 1.45; }
+
+    .closing { display: grid; place-items: center; height: 100%; text-align: center; }
+    .closing-card { width: min(980px, 82vw); padding: 70px 60px; }
+    .closing h1 { font-size: clamp(34px, 4.3vw, 64px); line-height: 1.35; }
+    .closing .accent { color: var(--rose); display: block; }
+    .closing .line { width: 390px; max-width: 70%; height: 5px; border-radius: 999px; background: var(--gold); margin: 34px auto; }
+    .closing h2 { font-size: 30px; }
+
+    .toolbar {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 30;
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,.74);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+    .toolbar button {
+      border: 1px solid var(--line);
+      color: var(--ink);
+      background: rgba(255,255,255,.68);
+      border-radius: 10px;
+      padding: 9px 12px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .toolbar button.active { background: var(--rose); color: white; border-color: var(--rose); }
+    .progress {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      height: 4px;
+      width: 100%;
+      z-index: 28;
+      background: rgba(242,202,214,.55);
+    }
+    .progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--rose), var(--gold)); transition: width .35s ease; }
+    .dots { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); display: flex; gap: 8px; z-index: 29; }
+    .dots button { width: 8px; height: 8px; padding: 0; border-radius: 99px; border: 0; background: rgba(139,111,124,.35); cursor: pointer; }
+    .dots button.active { width: 28px; background: var(--rose); }
+    [contenteditable="true"] { outline: 2px dashed rgba(217,70,124,.35); outline-offset: 3px; border-radius: 4px; }
+
+    .help {
+      position: fixed;
+      left: 18px;
+      bottom: 18px;
+      z-index: 30;
+      color: var(--muted);
+      font-size: 12px;
+      background: rgba(255,255,255,.62);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+    }
+
+    @media (max-width: 900px) {
+      .slide { padding: 24px; overflow-y: auto; }
+      .content { height: auto; min-height: 100%; padding-top: 62px; }
+      .metric-panel { position: relative; top: auto; right: auto; width: 100%; margin-top: 32px; }
+      .grid-3, .grid-2, .feature-grid, .compare-wrap, .flow, .note-row, .qa-panel, .start-grid, .automation, .system-recap-grid, .system-recap-core, .image-case, .image-pipeline, .field-grid, .task-grid { grid-template-columns: 1fr; }
+      .feature-grid .feature:nth-child(4), .feature-grid .feature:nth-child(5) { grid-column: auto; margin-left: 0; width: auto; }
+      .step:not(:last-child)::after, .auto-card:not(:last-child)::after, .pipeline-card:not(:last-child)::after, .arrow { display: none; }
+      .toolbar { top: auto; bottom: 48px; right: 12px; }
+      .help { display: none; }
+    }
+
+    @media print {
+      html, body { overflow: visible; height: auto; }
+      .app { position: static; }
+      .deck { display: block; transform: none !important; }
+      .slide { width: 100vw; height: 100vh; page-break-after: always; }
+      .toolbar, .dots, .progress, .help { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <main id="deck" class="deck">
+      <section class="slide" data-title="封面">
+        <div class="content">
+          <span class="eyebrow" data-editable>AI 新媒体实战</span>
+          <h1 class="hero-title" data-editable>CODEX</h1>
+          <div class="hero-line"></div>
+          <h2 class="hero-sub" data-editable>从零认识 Codex<br>到用它做出真实的小红书内容</h2>
+          <p class="lead" style="margin-top:58px" data-editable>阳阳 · 酒店新媒体 AI 提效实践者</p>
+          <div class="metric-panel card">
+            <div class="metric-row"><span class="metric-label" data-editable>2 人团队</span><strong class="metric-value" data-editable>2</strong></div>
+            <div class="metric-row"><span class="metric-label" data-editable>30 台手机</span><strong class="metric-value" data-editable>30</strong></div>
+            <div class="metric-row"><span class="metric-label" data-editable>300+ 篇/月</span><strong class="metric-value" data-editable>300+</strong></div>
+          </div>
+          <div class="foot" data-editable>非住不可 · www.fzbk.net</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="目录">
+        <div class="chrome"><span>AGENDA</span><span class="page-no">02</span></div>
+        <div class="content">
+          <h2 class="title" data-editable>今天分享什么</h2>
+          <p class="subtitle" data-editable>先把 Codex 讲清楚，再用小红书案例拆开看，最后回看它怎么串成一套业务系统。</p>
+          <div class="agenda">
+            <div class="agenda-item"><div class="num-box">01</div><div><h3 data-editable>Codex 是什么</h3><p data-editable>和 ChatGPT、Claude 有什么不同？为什么专门讲它？</p></div></div>
+            <div class="agenda-item"><div class="num-box">02</div><div><h3 data-editable>Codex 核心功能速览</h3><p data-editable>5 个你必须知道的基础能力，每个都很简单</p></div></div>
+            <div class="agenda-item"><div class="num-box">03</div><div><h3 data-editable>Codex 怎么进入小红书 SOP</h3><p data-editable>图片生产 · 文案批量生产 · AI 味筛选 · 评论客资回流</p></div></div>
+            <div class="agenda-item"><div class="num-box">04</div><div><h3 data-editable>最后回看业务系统</h3><p data-editable>飞书中枢 · 图片生产 · 内容生产 · 客资回收 · 多表巡查汇总</p></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Codex 是什么">
+        <div class="chrome"><span>01</span><span class="page-no">03</span></div>
+        <div class="content">
+          <h2 class="title" data-editable>不是写代码的 AI，是帮你「做事」的 AI</h2>
+          <p class="subtitle" data-editable>你说一句话，它自己去分析、拆解、执行、检验，最后把结果交给你。</p>
+          <div class="grid-3" style="margin-top:62px">
+            <article class="card feature"><h3 data-editable>ChatGPT</h3><p data-editable><b>对话 & 问答</b><br><br>你问它答，逐轮进行<br>不会自己执行任务</p></article>
+            <article class="card feature"><h3 data-editable>Claude</h3><p data-editable><b>长文分析 & 写作</b><br><br>擅长超长文档、报告<br>交互式，不自主执行</p></article>
+            <article class="card feature" style="background:rgba(252,231,239,.82);border-color:var(--rose-2)"><h3 style="color:var(--rose)" data-editable>Codex</h3><p data-editable><b>任务执行 Agent</b><br><br>给它一个目标，它自己<br>拆解 → 执行 → 交付结果</p></article>
+          </div>
+          <div class="callout" data-editable>重点：这里讲的是 2025 年上线的新版 Codex，和 2021 年老 Codex 完全不同，面向所有人，不只是程序员。</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="功能速览">
+        <div class="chrome"><span>02</span><span class="page-no">04</span></div>
+        <div class="content">
+          <h2 class="title" data-editable>Codex 核心功能速览</h2>
+          <p class="subtitle" data-editable>5 个最值得普通人知道的能力</p>
+          <div class="feature-grid">
+            <article class="card feature"><div class="idx">①</div><h3 data-editable>给任务，拿结果</h3><p data-editable>你只需说清楚「我要做什么」<br>Codex 自己制定计划并执行</p></article>
+            <article class="card feature"><div class="idx">②</div><h3 data-editable>多任务并行</h3><p data-editable>可以同时跑 10 件事<br>不需要你一件件去等</p></article>
+            <article class="card feature"><div class="idx">③</div><h3 data-editable>受控环境</h3><p data-editable>在授权范围内运行<br>每一步都能回看和确认</p></article>
+            <article class="card feature"><div class="idx">④</div><h3 data-editable>Skills 技能扩展</h3><p data-editable>把你常用流程打包成<br>一键调用的「技能包」</p></article>
+            <article class="card feature"><div class="idx">⑤</div><h3 data-editable>Automations 自动化</h3><p data-editable>设定好，让它定时<br>在后台自动帮你跑</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="10 个任务">
+        <div class="chrome"><span>EXAMPLES</span><span class="page-no">05</span></div>
+        <div class="content">
+          <h2 class="title" data-editable>Codex 能帮普通人完成的 10 类任务</h2>
+          <p class="subtitle" data-editable>它不是只会写代码。你把目标、素材、标准说清楚，它可以帮你拆任务、执行、检查、交付。</p>
+          <div class="task-grid">
+            <article class="card task-card"><div class="num">01</div><h3 data-editable>修图 / 调滤镜</h3><p data-editable>生成图片、改图、做封面背景，也可在授权下协助操作桌面软件。</p></article>
+            <article class="card task-card"><div class="num">02</div><h3 data-editable>做 PPT</h3><p data-editable>从文档、表格、截图里提炼结构，生成可编辑演示稿。</p></article>
+            <article class="card task-card"><div class="num">03</div><h3 data-editable>写文案</h3><p data-editable>批量生成标题、正文、人设角度、评论区回复话术。</p></article>
+            <article class="card task-card"><div class="num">04</div><h3 data-editable>做表格</h3><p data-editable>整理字段、清洗数据、分类汇总、做公式和模板。</p></article>
+            <article class="card task-card"><div class="num">05</div><h3 data-editable>搭网页 / 小工具</h3><p data-editable>做 HTML 页面、活动页、计算器、查询工具、展示页。</p></article>
+            <article class="card task-card"><div class="num">06</div><h3 data-editable>整理资料</h3><p data-editable>把长文、截图、聊天记录整理成大纲、SOP、清单。</p></article>
+            <article class="card task-card"><div class="num">07</div><h3 data-editable>跑自动化</h3><p data-editable>定时检查数据、扫描评论区、生成日报、推送提醒。</p></article>
+            <article class="card task-card"><div class="num">08</div><h3 data-editable>检查网页问题</h3><p data-editable>看排版、按钮、移动端适配、报错，并定位问题。</p></article>
+            <article class="card task-card"><div class="num">09</div><h3 data-editable>连接业务系统</h3><p data-editable>把飞书、图片生产、内容生产、客资回收串成流程。</p></article>
+            <article class="card task-card"><div class="num">10</div><h3 data-editable>复盘和决策</h3><p data-editable>分析笔记数据、评论线索、内容表现，给下一轮动作。</p></article>
+          </div>
+          <div class="callout task-summary" data-editable>你不用先学代码，先学会把业务说清楚。Codex 负责把任务拆开、执行、检查、交付。</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="核心差异">
+        <div class="chrome"><span>DIFF</span><span class="page-no">06</span></div>
+        <div class="content">
+          <h2 class="title" data-editable>Codex 和你熟悉的 AI 最大的不同</h2>
+          <p class="subtitle" data-editable>场景：帮我做一张成都酒店的小红书爆款文案，生成 10 个不同角度</p>
+          <div class="compare-wrap">
+            <article class="card compare"><h3 data-editable>ChatGPT / Claude</h3><div class="kv"><b>执行</b><span data-editable>给你一段文案，让你自己改</span><b>结果</b><span data-editable>你还得逐条调整、反复追问</span></div></article>
+            <div class="arrow"></div>
+            <article class="card compare highlight"><h3 style="color:var(--rose)" data-editable>Codex</h3><div class="kv"><b>执行</b><span data-editable>分析 → 发散 → 写作 → 打分筛选 → 交付</span><b>结果</b><span data-editable>你只要看结果，选你要的</span></div></article>
+          </div>
+          <div class="callout" data-editable>核心差异：ChatGPT 帮你「想」，Codex 帮你「做」。一个是助手，一个是执行者。</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="小红书流程">
+        <div class="chrome"><span>03</span><span class="page-no">07</span></div>
+        <div class="content">
+          <h2 class="title" data-editable>我怎么用 Codex 做小红书</h2>
+          <p class="subtitle" data-editable>一张图看懂整个流程</p>
+          <div class="flow">
+            <article class="card step" style="background:rgba(252,231,239,.82)"><div class="k">STEP 1</div><h3 data-editable>Codex<br>批量发散</h3><p data-editable>10 个人设<br>10 种角度</p></article>
+            <article class="card step"><div class="k">STEP 2</div><h3 data-editable>Gemini<br>初筛拟人度</h3><p data-editable>挑出 20 条<br>最像真人的</p></article>
+            <article class="card step"><div class="k">STEP 3</div><h3 data-editable>定位<br>AI 味</h3><p data-editable>找出每条里<br>最像机器的句子</p></article>
+            <article class="card step"><div class="k">STEP 4</div><h3 data-editable>人工<br>表达</h3><p data-editable>换成自己的<br>真实口吻</p></article>
+          </div>
+          <div class="note-row">
+            <div class="note" data-editable>工具组合：Codex + 飞书多维表 + Gemini 侧边栏 + 人工审核</div>
+            <div class="note" data-editable>原则：AI 负责把可能性打开，人负责把表达收回来。</div>
+          </div>
+          <div class="funnel"><div><strong data-editable>100条</strong><span data-editable>Codex 初稿</span></div><div><strong data-editable>20条</strong><span data-editable>Gemini 筛选后</span></div><div><strong data-editable>5-10条</strong><span data-editable>人工最终选用</span></div></div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="案例 1">
+        <div class="chrome"><span>案例 1</span><span class="page-no">08</span></div>
+        <div class="content">
+          <h2 class="title" data-editable>图片生产：先解决“图片素材不够用”</h2>
+          <p class="subtitle" data-editable>为什么用多维表？不是为了自己用得爽，而是让同事也能共享同一套图片生产入口。</p>
+          <div class="image-case">
+            <article class="card image-logic">
+              <h3 data-editable>这套表背后的业务逻辑</h3>
+              <p data-editable>去年 12 月图片模型很火，但直接用会遇到两个问题：成本高、只能我自己用，不能让团队一起稳定复用。所以我把图片生产接进飞书多维表。</p>
+              <div class="problem-list">
+                <div class="problem" data-editable><b>问题 1：</b>图片需求分散在聊天里，比例、分辨率、参考图、描述经常漏。</div>
+                <div class="problem" data-editable><b>问题 2：</b>模型入口只掌握在一个人手里，同事不能自助提交和查看结果。</div>
+                <div class="problem" data-editable><b>解决：</b>把“提需求、跑工作流、回写结果”都放进同一张表。</div>
+              </div>
+            </article>
+            <article class="card table-mock">
+              <h3 data-editable>飞书多维表不是表格，是图片生产工单</h3>
+              <div class="field-grid">
+                <div class="field"><strong data-editable>字段输入</strong><span data-editable>比例 / 分辨率 / 图片描述 / 参考图 / 使用账号</span></div>
+                <div class="field"><strong data-editable>状态管理</strong><span data-editable>待生成 / 生成中 / 已回写 / 需重做</span></div>
+                <div class="field"><strong data-editable>负责人</strong><span data-editable>谁提交、谁审核、谁拿去发布，一眼能看清</span></div>
+                <div class="field"><strong data-editable>结果沉淀</strong><span data-editable>图片、链接、提示词、失败原因都回到表里</span></div>
+              </div>
+            </article>
+          </div>
+          <div class="image-pipeline">
+            <article class="card pipeline-card"><h3 data-editable>字段输入</h3><p data-editable>同事只填需求：比例、分辨率、描述、参考图。</p></article>
+            <article class="card pipeline-card"><h3 data-editable>工作流调用</h3><p data-editable>多维表触发 Coze / API，不再手动复制粘贴。</p></article>
+            <article class="card pipeline-card"><h3 data-editable>模型生成</h3><p data-editable>Nano Banana 等模型出图，过程可追踪。</p></article>
+            <article class="card pipeline-card"><h3 data-editable>结果回写</h3><p data-editable>图片和链接回到表里，团队直接取用。</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="案例 2">
+        <div class="chrome"><span>案例 2</span><span class="page-no">09</span></div>
+        <div class="content">
+          <h2 class="title" data-editable>文案批量生产：我怎么给 Codex 下指令</h2>
+          <div class="grid-2" style="margin-top:58px;align-items:start">
+            <article class="card prompt-box"><h3 data-editable>我给 Codex 的指令长这样：</h3><div class="prompt-text" data-editable>帮我围绕「成都高端商务酒店」
+生成 10 条小红书文案草稿。
+
+要求：
+· 10 个不同人设（商旅白领/情侣/亲子…）
+· 每条 150-200 字
+· 口吻自然，像真人写的
+· 结尾带一个行动引导
+
+输出格式：
+编号 | 人设 | 文案正文</div></article>
+            <div><h3 class="title" style="font-size:32px" data-editable>为什么这样写指令？</h3><div class="reason-list">
+              <div class="reason"><b data-editable>① 明确主题</b><span data-editable>不要说「帮我写文案」，要说清楚酒店/场景</span></div>
+              <div class="reason"><b data-editable>② 限定人设</b><span data-editable>人设越具体，文案越有差异化</span></div>
+              <div class="reason"><b data-editable>③ 规定字数</b><span data-editable>控制长度 = 控制成本 + 方便后续筛选</span></div>
+              <div class="reason"><b data-editable>④ 说输出格式</b><span data-editable>让结果直接进飞书表格，省去手动整理</span></div>
+              <div class="reason"><b data-editable>⑤ 不追求完美</b><span data-editable>第一轮只要数量，筛选才是关键</span></div>
+            </div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="案例 3">
+        <div class="chrome"><span>案例 3</span><span class="page-no">10</span></div>
+        <div class="content">
+          <h2 class="title" data-editable>降低 AI 味：筛选比生成更重要</h2>
+          <p class="subtitle" data-editable>这页不是讲“让 AI 再写一遍”，而是讲一套质量控制流程：先扩大候选，再把模板感变成可见问题，最后由人收口。</p>
+          <div class="filter-system">
+            <article class="card filter-stage">
+              <div class="badge" data-editable>第一道 · 初筛</div>
+              <h3 data-editable>Gemini 侧边栏筛拟人度</h3>
+              <p data-editable>把 100 条初稿放进飞书表格，让 Gemini 选出最不像模板、最具体、最有细节的内容。</p>
+              <div class="filter-output" data-editable>筛掉：套话 / 排比句 / 表情包开头<br>输出：20 条候选</div>
+            </article>
+            <article class="card filter-stage">
+              <div class="badge" data-editable>第二道 · 定位问题</div>
+              <h3 data-editable>找出每条里的 AI 味句子</h3>
+              <p data-editable>不是整篇推翻，而是让 AI 标出每条里最像机器的一句话，把模糊的“不自然”变成可改的对象。</p>
+              <div class="filter-output" data-editable>典型问题：「不仅…还…」「深度…体验」<br>输出：逐条修改点</div>
+            </article>
+            <article class="card filter-stage">
+              <div class="badge" data-editable>第三道 · 人工收口</div>
+              <h3 data-editable>保留信息，换掉腔调</h3>
+              <p data-editable>用真实业务经验和自己的说话习惯，把机器腔改成人话。不是追求华丽，而是读起来像朋友发来的。</p>
+              <div class="filter-output" data-editable>保留：信息密度<br>替换：表达方式</div>
+            </article>
+          </div>
+          <div class="filter-principle">
+            <div class="mini" data-editable>可复制口径：AI 负责把可能性打开，人负责把表达收回来。</div>
+            <div class="mini" data-editable>这一步决定内容能不能从“批量生成”走向“稳定可用”。</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="案例 4">
+        <div class="chrome"><span>案例 4</span><span class="page-no">11</span></div>
+        <div class="content">
+          <h2 class="title" data-editable>评论客资回流：让 Codex 帮你搭自动化</h2>
+          <p class="subtitle" data-editable>人少的时候，最怕精准评论被漏掉。这件事适合做成“自动巡查 + 人工跟进”。</p>
+          <div class="automation">
+            <article class="card auto-card"><h3 data-editable>笔记链接入表</h3><p data-editable>所有账号笔记链接<br>统一填进飞书多维表</p></article>
+            <article class="card auto-card"><h3 data-editable>定时巡查评论</h3><p data-editable>自动巡查笔记评论区<br>减少人工漏看</p></article>
+            <article class="card auto-card"><h3 data-editable>识别有效客资</h3><p data-editable>筛出求报价/想预定/<br>在吗这类精准评论</p></article>
+            <article class="card auto-card"><h3 data-editable>机器人推送</h3><p data-editable>自动发到飞书群<br>@对应负责人</p></article>
+            <article class="card auto-card"><h3 data-editable>手机点击回复</h3><p data-editable>直接跳链接<br>用对应账号及时回复</p></article>
+          </div>
+          <div class="callout" data-editable>延伸用法：同样可以监控同行爆款笔记评论区，发现可截流的需求 / 用户真实痛点</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="不会写代码">
+        <div class="chrome"><span>Q&A</span><span class="page-no">12</span></div>
+        <div class="content">
+          <h2 class="title" data-editable>我不会写代码，能用 Codex 吗？</h2>
+          <p class="subtitle" style="font-weight:900;color:var(--ink)" data-editable>答：可以。大部分新媒体场景，你只需要会「说任务」。</p>
+          <div class="qa-panel">
+            <article class="card qa good"><h3 data-editable>用 Codex 不需要</h3><ul data-editable><li>写代码（会说话就行）</li><li>懂 API（有现成接口）</li><li>自己搭服务器</li><li>每条手动调整文案</li></ul></article>
+            <article class="card qa need"><h3 data-editable>你需要做的</h3><ul data-editable><li>把业务拆成清晰步骤</li><li>学会写结构化指令</li><li>设计好字段和流程</li><li>保留人工审核这道关</li></ul></article>
+          </div>
+          <div class="callout" data-editable>核心能力不是「会用 AI」，是「能把业务拆成 AI 能执行的步骤」</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="第一步">
+        <div class="chrome"><span>04</span><span class="page-no">13</span></div>
+        <div class="content">
+          <h2 class="title" data-editable>你可以马上开始的第一步</h2>
+          <div class="start-grid">
+            <article class="card start-card"><div class="circle">1</div><div><h3 data-editable>先找一件最重复的事</h3><p data-editable>每天要反复做、容易漏、结果标准化的那件事。例：每周要写 20 条不同角度的标题</p></div></article>
+            <article class="card start-card"><div class="circle">2</div><div><h3 data-editable>把它拆成字段</h3><p data-editable>输入是什么？判断条件是什么？输出要什么格式？例：酒店名 | 目标人群 | 字数 | 口吻风格</p></div></article>
+            <article class="card start-card"><div class="circle">3</div><div><h3 data-editable>给 Codex 写一条指令测试</h3><p data-editable>不追求完美，先跑通第一个流程。看结果 → 调整指令 → 再跑</p></div></article>
+            <article class="card start-card"><div class="circle">4</div><div><h3 data-editable>加上筛选机制</h3><p data-editable>AI 生产 → 人工或 AI 初筛 → 人工最终选用。这道关不能省，否则质量会失控</p></div></article>
+          </div>
+          <div class="callout" data-editable>AI 不是替代新媒体人，而是把新媒体人的 SOP 放大。</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="业务系统回顾">
+        <div class="chrome"><span>SYSTEM RECAP</span><span class="page-no">14</span></div>
+        <div class="content">
+          <h2 class="title" data-editable>回过头看，它其实是一套新媒体业务闭环</h2>
+          <p class="subtitle" data-editable>前面讲的文案、图片、评论、客资，不是散点工具，而是围绕飞书多维表串起来的一套可复用系统。</p>
+          <div class="system-recap-core card">
+            <h3 data-editable>飞书多维表<br>做业务中枢</h3>
+            <p data-editable>字段、状态、笔记链接、负责人、评论线索、自动化结果都回到这里。它负责把“内容生产”和“客资回收”接成一条线。</p>
+          </div>
+          <div class="system-recap-grid">
+            <article class="card system-recap-card"><div class="tagline">01 · 生产端</div><h3 data-editable>图片 / 素材生产</h3><p data-editable>选题方向、封面字、图片需求、账号素材先入表，减少沟通漏项。</p></article>
+            <article class="card system-recap-card"><div class="tagline">02 · 内容端</div><h3 data-editable>标题 / 正文生产</h3><p data-editable>Codex 批量发散角度、人设、标题和正文，再进入筛选流程。</p></article>
+            <article class="card system-recap-card"><div class="tagline">03 · 质量关</div><h3 data-editable>AI 初筛 + 人工审核</h3><p data-editable>用 Gemini / Codex 找 AI 味和模板感，最终由人把表达收回来。</p></article>
+            <article class="card system-recap-card"><div class="tagline">04 · 回收端</div><h3 data-editable>评论巡查识别客资</h3><p data-editable>定时巡查笔记评论，识别求报价、想预定、在吗等有效线索。</p></article>
+            <article class="card system-recap-card"><div class="tagline">05 · 转化端</div><h3 data-editable>负责人及时回复</h3><p data-editable>机器人推送到飞书群，@ 对应负责人，用正确账号回到评论区跟进。</p></article>
+            <article class="card system-recap-card"><div class="tagline">06 · 管理端</div><h3 data-editable>多表巡查汇总复盘</h3><p data-editable>账号、笔记、评论、客资、竞品线索跨表汇总，回流成下一轮选题和优化依据。</p></article>
+          </div>
+          <div class="callout system-recap-callout" data-editable>这套系统的价值：不是多写几篇文案，而是让新媒体从“人盯人”变成“流程自动巡查，人做判断和跟进”。</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="结尾">
+        <div class="content closing">
+          <article class="card closing-card">
+            <h1 data-editable>AI 不会替代你，<span class="accent">但会用 AI 的人会替代不会用的人。</span></h1>
+            <div class="line"></div>
+            <h2 data-editable>Codex 是工具，SOP 才是护城河。</h2>
+          </article>
+          <div class="foot" style="left:50%;transform:translateX(-50%);text-align:center" data-editable>欢迎交流 · 非住不可 · www.fzbk.net</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toolbar">
+    <button id="prevBtn" title="上一页">上一页</button>
+    <button id="nextBtn" title="下一页">下一页</button>
+    <button id="editBtn" title="直接编辑页面文字">编辑模式</button>
+    <button id="restoreBtn" title="恢复旧版本里暂存的编辑">恢复旧编辑</button>
+    <button id="downloadBtn" title="下载包含当前修改的 HTML">下载HTML</button>
+  </div>
+  <div class="help">← → 翻页 · E 编辑 · Esc 退出编辑 · Cmd/Ctrl+P 打印导出 PDF</div>
+  <div id="dots" class="dots" aria-label="页面导航"></div>
+  <div class="progress"><i id="bar"></i></div>
+
+  <script>
+    const deck = document.getElementById('deck');
+    const slides = [...document.querySelectorAll('.slide')];
+    const dots = document.getElementById('dots');
+    const bar = document.getElementById('bar');
+    const editBtn = document.getElementById('editBtn');
+    const restoreBtn = document.getElementById('restoreBtn');
+    const storageKey = 'codex-media-share-feminine-html-v7';
+    const legacyStorageKeys = [
+      'codex-media-share-feminine-html-v6',
+      'codex-media-share-feminine-html-v5',
+      'codex-media-share-feminine-html-v4',
+      'codex-media-share-feminine-html-v3',
+      'codex-media-share-feminine-html-v2',
+      'codex-media-share-feminine-html-v1'
+    ];
+    let current = 0;
+    let editing = false;
+
+    slides.forEach((slide, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.title = `${i + 1}. ${slide.dataset.title || ''}`;
+      btn.addEventListener('click', () => go(i));
+      dots.appendChild(btn);
+    });
+
+    function go(index) {
+      current = Math.max(0, Math.min(index, slides.length - 1));
+      deck.style.transform = `translateX(${-current * 100}vw)`;
+      [...dots.children].forEach((d, i) => d.classList.toggle('active', i === current));
+      bar.style.width = `${((current + 1) / slides.length) * 100}%`;
+    }
+
+    function toggleEdit(force) {
+      editing = typeof force === 'boolean' ? force : !editing;
+      document.querySelectorAll('[data-editable]').forEach(el => {
+        el.contentEditable = editing ? 'true' : 'false';
+      });
+      editBtn.classList.toggle('active', editing);
+      editBtn.textContent = editing ? '正在编辑' : '编辑模式';
+      if (!editing) saveEdits();
+    }
+
+    function saveEdits() {
+      const data = [...document.querySelectorAll('[data-editable]')].map(el => el.innerHTML);
+      localStorage.setItem(storageKey, JSON.stringify(data));
+    }
+
+    function readStoredEdits(key) {
+      try {
+        const data = JSON.parse(localStorage.getItem(key) || 'null');
+        return Array.isArray(data) ? data : null;
+      } catch {
+        return null;
+      }
+    }
+
+    function editableIndexesForSlide(title) {
+      const all = [...document.querySelectorAll('[data-editable]')];
+      const slide = [...document.querySelectorAll('.slide')].find(item => item.dataset.title === title);
+      if (!slide) return [];
+      return [...slide.querySelectorAll('[data-editable]')].map(el => all.indexOf(el)).filter(i => i >= 0);
+    }
+
+    function migrateLegacyEdits(data) {
+      const all = [...document.querySelectorAll('[data-editable]')];
+      const currentDefaults = all.map(el => el.innerHTML);
+      const addedTaskIndexes = editableIndexesForSlide('10 个任务');
+      const addedImageIndexes = editableIndexesForSlide('案例 1');
+      const addedTaskCount = addedTaskIndexes.length;
+      const addedImageCount = addedImageIndexes.length;
+      const taskStart = Math.min(...addedTaskIndexes);
+      const imageStart = Math.min(...addedImageIndexes);
+
+      if (data.length === all.length) return data;
+
+      // v6 -> v7: only the "10 个任务" page is new.
+      if (data.length === all.length - addedTaskCount) {
+        return currentDefaults.map((value, i) => {
+          if (addedTaskIndexes.includes(i)) return value;
+          return data[i < taskStart ? i : i - addedTaskCount] ?? value;
+        });
+      }
+
+      // v5 and earlier -> v7: both "10 个任务" and "图片生产" pages are new.
+      if (data.length === all.length - addedTaskCount - addedImageCount) {
+        return currentDefaults.map((value, i) => {
+          if (addedTaskIndexes.includes(i) || addedImageIndexes.includes(i)) return value;
+          let offset = 0;
+          if (i > taskStart) offset += addedTaskCount;
+          if (i > imageStart) offset += addedImageCount;
+          return data[i - offset] ?? value;
+        });
+      }
+
+      return null;
+    }
+
+    function applyStoredEdits(data) {
+      document.querySelectorAll('[data-editable]').forEach((el, i) => {
+        if (typeof data[i] === 'string') el.innerHTML = data[i];
+      });
+    }
+
+    function restoreLegacyEdits(showMessage = true) {
+      for (const key of legacyStorageKeys) {
+        const legacy = readStoredEdits(key);
+        if (!legacy) continue;
+        const migrated = migrateLegacyEdits(legacy);
+        if (!migrated) continue;
+        applyStoredEdits(migrated);
+        localStorage.setItem(storageKey, JSON.stringify(migrated));
+        if (showMessage) alert(`已从 ${key.replace('codex-media-share-feminine-html-', '')} 恢复旧编辑。新增页面保留新版默认内容。`);
+        return true;
+      }
+      if (showMessage) alert('没有找到可迁移的旧编辑缓存。如果你点过“下载HTML”，请打开下载后的文件。');
+      return false;
+    }
+
+    function loadEdits() {
+      const raw = localStorage.getItem(storageKey);
+      if (!raw) {
+        restoreLegacyEdits(false);
+        return;
+      }
+      try {
+        const data = JSON.parse(raw);
+        applyStoredEdits(data);
+      } catch {}
+    }
+
+    function downloadHtml() {
+      saveEdits();
+      const clone = document.documentElement.cloneNode(true);
+      clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+      clone.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
+      const html = '<!doctype html>\\n' + clone.outerHTML;
+      const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Codex新媒体实战分享-女性色彩版-已编辑.html';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    document.getElementById('prevBtn').addEventListener('click', () => go(current - 1));
+    document.getElementById('nextBtn').addEventListener('click', () => go(current + 1));
+    editBtn.addEventListener('click', () => toggleEdit());
+    restoreBtn.addEventListener('click', () => restoreLegacyEdits(true));
+    document.getElementById('downloadBtn').addEventListener('click', downloadHtml);
+    document.addEventListener('input', event => {
+      if (editing && event.target.matches('[data-editable]')) saveEdits();
+    });
+    document.addEventListener('keydown', event => {
+      if (editing && event.key !== 'Escape' && event.key.toLowerCase() !== 'e') return;
+      if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') go(current + 1);
+      if (event.key === 'ArrowLeft' || event.key === 'PageUp') go(current - 1);
+      if (event.key.toLowerCase() === 'e') toggleEdit();
+      if (event.key === 'Escape') toggleEdit(false);
+    });
+
+    loadEdits();
+    go(0);
+  </script>
+</body>
+</html>
