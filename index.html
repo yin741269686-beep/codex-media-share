@@ -624,7 +624,6 @@
     <button id="prevBtn" title="上一页">上一页</button>
     <button id="nextBtn" title="下一页">下一页</button>
     <button id="editBtn" title="直接编辑页面文字">编辑模式</button>
-    <button id="restoreBtn" title="恢复旧版本里暂存的编辑">恢复旧编辑</button>
     <button id="downloadBtn" title="下载包含当前修改的 HTML">下载HTML</button>
   </div>
   <div class="help">← → 翻页 · E 编辑 · Esc 退出编辑 · Cmd/Ctrl+P 打印导出 PDF</div>
@@ -637,16 +636,7 @@
     const dots = document.getElementById('dots');
     const bar = document.getElementById('bar');
     const editBtn = document.getElementById('editBtn');
-    const restoreBtn = document.getElementById('restoreBtn');
-    const storageKey = 'codex-media-share-feminine-html-v7';
-    const legacyStorageKeys = [
-      'codex-media-share-feminine-html-v6',
-      'codex-media-share-feminine-html-v5',
-      'codex-media-share-feminine-html-v4',
-      'codex-media-share-feminine-html-v3',
-      'codex-media-share-feminine-html-v2',
-      'codex-media-share-feminine-html-v1'
-    ];
+    const storageKey = 'codex-media-share-feminine-html-v8';
     let current = 0;
     let editing = false;
 
@@ -680,86 +670,14 @@
       localStorage.setItem(storageKey, JSON.stringify(data));
     }
 
-    function readStoredEdits(key) {
-      try {
-        const data = JSON.parse(localStorage.getItem(key) || 'null');
-        return Array.isArray(data) ? data : null;
-      } catch {
-        return null;
-      }
-    }
-
-    function editableIndexesForSlide(title) {
-      const all = [...document.querySelectorAll('[data-editable]')];
-      const slide = [...document.querySelectorAll('.slide')].find(item => item.dataset.title === title);
-      if (!slide) return [];
-      return [...slide.querySelectorAll('[data-editable]')].map(el => all.indexOf(el)).filter(i => i >= 0);
-    }
-
-    function migrateLegacyEdits(data) {
-      const all = [...document.querySelectorAll('[data-editable]')];
-      const currentDefaults = all.map(el => el.innerHTML);
-      const addedTaskIndexes = editableIndexesForSlide('10 个任务');
-      const addedImageIndexes = editableIndexesForSlide('案例 1');
-      const addedTaskCount = addedTaskIndexes.length;
-      const addedImageCount = addedImageIndexes.length;
-      const taskStart = Math.min(...addedTaskIndexes);
-      const imageStart = Math.min(...addedImageIndexes);
-
-      if (data.length === all.length) return data;
-
-      // v6 -> v7: only the "10 个任务" page is new.
-      if (data.length === all.length - addedTaskCount) {
-        return currentDefaults.map((value, i) => {
-          if (addedTaskIndexes.includes(i)) return value;
-          return data[i < taskStart ? i : i - addedTaskCount] ?? value;
-        });
-      }
-
-      // v5 and earlier -> v7: both "10 个任务" and "图片生产" pages are new.
-      if (data.length === all.length - addedTaskCount - addedImageCount) {
-        return currentDefaults.map((value, i) => {
-          if (addedTaskIndexes.includes(i) || addedImageIndexes.includes(i)) return value;
-          let offset = 0;
-          if (i > taskStart) offset += addedTaskCount;
-          if (i > imageStart) offset += addedImageCount;
-          return data[i - offset] ?? value;
-        });
-      }
-
-      return null;
-    }
-
-    function applyStoredEdits(data) {
-      document.querySelectorAll('[data-editable]').forEach((el, i) => {
-        if (typeof data[i] === 'string') el.innerHTML = data[i];
-      });
-    }
-
-    function restoreLegacyEdits(showMessage = true) {
-      for (const key of legacyStorageKeys) {
-        const legacy = readStoredEdits(key);
-        if (!legacy) continue;
-        const migrated = migrateLegacyEdits(legacy);
-        if (!migrated) continue;
-        applyStoredEdits(migrated);
-        localStorage.setItem(storageKey, JSON.stringify(migrated));
-        if (showMessage) alert(`已从 ${key.replace('codex-media-share-feminine-html-', '')} 恢复旧编辑。新增页面保留新版默认内容。`);
-        return true;
-      }
-      if (showMessage) alert('没有找到可迁移的旧编辑缓存。如果你点过“下载HTML”，请打开下载后的文件。');
-      return false;
-    }
-
     function loadEdits() {
       const raw = localStorage.getItem(storageKey);
-      if (!raw) {
-        restoreLegacyEdits(false);
-        return;
-      }
+      if (!raw) return;
       try {
         const data = JSON.parse(raw);
-        applyStoredEdits(data);
+        document.querySelectorAll('[data-editable]').forEach((el, i) => {
+          if (typeof data[i] === 'string') el.innerHTML = data[i];
+        });
       } catch {}
     }
 
@@ -780,7 +698,6 @@
     document.getElementById('prevBtn').addEventListener('click', () => go(current - 1));
     document.getElementById('nextBtn').addEventListener('click', () => go(current + 1));
     editBtn.addEventListener('click', () => toggleEdit());
-    restoreBtn.addEventListener('click', () => restoreLegacyEdits(true));
     document.getElementById('downloadBtn').addEventListener('click', downloadHtml);
     document.addEventListener('input', event => {
       if (editing && event.target.matches('[data-editable]')) saveEdits();
